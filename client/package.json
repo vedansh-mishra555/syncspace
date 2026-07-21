@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "react": "^19.2.7",
+<<<<<<< HEAD
     "react-dom": "^19.2.7",
     "socket.io-client": "^4.8.3"
+=======
+    "react-dom": "^19.2.7"
+>>>>>>> eb71c69 (Day 1: Initial MERN project setup with React and Express)
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
