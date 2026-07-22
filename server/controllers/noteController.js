@@ -1,20 +1,37 @@
-const getNotes = (req, res) => {
-    const notes = [
-        {
-            id: 1,
-            title: "Learn Express",
-            content: "Understand routes and controllers"
-        },
-        {
-            id: 2,
-            title: "Build SyncSpace",
-            content: "Create a collaborative note app"
-        }
-    ];
+const Note = require("../models/Note");
 
-    res.json(notes);
+// GET all notes
+const getNotes = async (req, res) => {
+    try {
+        const notes = await Note.find();
+
+        res.status(200).json(notes);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
+// CREATE new note
+const createNote = async (req, res) => {
+    try {
+        const { title, content } = req.body;
+
+        const note = await Note.create({
+            title,
+            content,
+        });
+
+        res.status(201).json(note);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
 };
 
 module.exports = {
     getNotes,
+    createNote,
 };
