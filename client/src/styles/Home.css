@@ -1,65 +1,271 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fb;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
-.container {
-  max-width: 800px;
-  margin: auto;
-  padding: 30px;
+body{
+
+background:
+linear-gradient(135deg,#000000,#111111,#1b1b1b);
+
+color:white;
+
+min-height:100vh;
+
 }
 
-h1 {
-  text-align: center;
-  color: #333;
+/* Container */
+
+.container{
+
+width:100%;
+
+max-width:1200px;
+
+margin:auto;
+
+padding:40px;
+
 }
 
-.form {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  box-shadow: 0 3px 10px rgba(0,0,0,.1);
+/* Form */
+
+.form{
+
+background:rgba(255,215,0,.05);
+
+border:1px solid rgba(255,215,0,.15);
+
+backdrop-filter:blur(18px);
+
+padding:30px;
+
+border-radius:20px;
+
+margin-bottom:40px;
+
+box-shadow:0 15px 35px rgba(255,215,0,.08);
+
 }
+
+.form h2{
+
+color:#FFD700;
+
+margin-bottom:20px;
+
+}
+
+/* Inputs */
 
 input,
-textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+
+textarea{
+
+width:100%;
+
+padding:15px;
+
+background:#111;
+
+border:1px solid #444;
+
+color:white;
+
+border-radius:12px;
+
+font-size:16px;
+
+margin-bottom:20px;
+
 }
 
-button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
+input:focus,
+
+textarea:focus{
+
+border:1px solid gold;
+
+box-shadow:0 0 10px gold;
+
+outline:none;
+
 }
 
-button:hover {
-  background: #1d4ed8;
+textarea{
+
+min-height:170px;
+
+resize:none;
+
 }
 
-.note-card {
-  background: white;
-  padding: 18px;
-  margin-top: 20px;
-  border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0,0,0,.1);
+/* Buttons */
+
+button{
+
+padding:13px 25px;
+
+border:none;
+
+border-radius:12px;
+
+cursor:pointer;
+
+font-size:16px;
+
+font-weight:bold;
+
+transition:.35s;
+
+color:black;
+
 }
 
-.note-card h3 {
-  margin: 0;
+/* Add */
+
+.form button{
+
+background:linear-gradient(135deg,#FFD700,#F5C518);
+
 }
 
-.note-card p {
-  color: #555;
+.form button:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 10px 25px rgba(255,215,0,.45);
+
+}
+
+/* Cards */
+
+.note-card{
+
+background:#111;
+
+border:1px solid rgba(255,215,0,.15);
+
+padding:25px;
+
+border-radius:18px;
+
+margin-bottom:25px;
+
+transition:.35s;
+
+box-shadow:0 10px 25px rgba(0,0,0,.45);
+
+}
+
+.note-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 15px 40px rgba(255,215,0,.25);
+
+}
+
+.note-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:20px;
+
+}
+
+.note-header h3{
+
+color:#FFD700;
+
+font-size:24px;
+
+}
+
+.note-date{
+
+color:#ccc;
+
+}
+
+.note-content{
+
+line-height:1.8;
+
+color:#eee;
+
+margin-bottom:20px;
+
+}
+
+/* Buttons */
+
+.note-actions{
+
+display:flex;
+
+gap:15px;
+
+}
+
+.edit-btn{
+
+background:linear-gradient(135deg,#FFD700,#ffcc00);
+
+color:black;
+
+}
+
+.delete-btn{
+
+background:linear-gradient(135deg,#ff3d3d,#b00020);
+
+color:white;
+
+}
+
+.edit-btn:hover{
+
+box-shadow:0 10px 20px rgba(255,215,0,.45);
+
+}
+
+.delete-btn:hover{
+
+box-shadow:0 10px 20px rgba(255,0,0,.35);
+
+}
+
+/* Empty */
+
+.empty-state{
+
+text-align:center;
+
+padding:80px;
+
+}
+
+.empty-state h1{
+
+font-size:90px;
+
+}
+
+.note-count{
+
+color:#FFD700;
+
+margin-bottom:25px;
+
+font-weight:500;
+
 }

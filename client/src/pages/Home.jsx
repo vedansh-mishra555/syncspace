@@ -2,16 +2,21 @@ import { useState, useEffect, useCallback } from "react";
 import API from "../services/api";
 import "../styles/Home.css";
 
+import Navbar from "../components/Navbar";
+import NoteForm from "../components/NoteForm";
+import NoteCard from "../components/NoteCard";
+import SearchBar from "../components/SearchBar";
+
 function Home() {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [search, setSearch] = useState("");
 
-  // Edit states
   const [editingId, setEditingId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Fetch all notes
+  // Fetch Notes
   const fetchNotes = useCallback(async () => {
     try {
       const res = await API.get("/notes");
@@ -21,41 +26,36 @@ function Home() {
     }
   }, []);
 
-  // Load notes on page load
   useEffect(() => {
     fetchNotes();
   }, [fetchNotes]);
 
-  // Add or Update Note
+  // Add / Update Note
   const addNote = async () => {
-    if (!title || !content) {
+    if (!title.trim() || !content.trim()) {
       alert("Please fill all fields");
       return;
     }
 
     try {
       if (isEditing) {
-        // Update existing note
         await API.put(`/notes/${editingId}`, {
           title,
           content,
         });
 
-        setIsEditing(false);
         setEditingId(null);
+        setIsEditing(false);
       } else {
-        // Create new note
         await API.post("/notes", {
           title,
           content,
         });
       }
 
-      // Clear form
       setTitle("");
       setContent("");
 
-      // Refresh notes
       fetchNotes();
     } catch (error) {
       console.log(error);
@@ -64,11 +64,7 @@ function Home() {
 
   // Delete Note
   const deleteNote = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this note?"
-    );
-
-    if (!confirmDelete) return;
+    if (!window.confirm("Delete this note?")) return;
 
     try {
       await API.delete(`/notes/${id}`);
@@ -85,78 +81,60 @@ function Home() {
 
     setEditingId(note._id);
     setIsEditing(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
+  // Search Filter
+  const filteredNotes = notes.filter(
+    (note) =>
+      note.title.toLowerCase().includes(search.toLowerCase()) ||
+      note.content.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <div className="container">
-      <h1>📝 SyncSpace</h1>
+    <>
+      <Navbar />
 
-      <div className="form">
-        <h2>{isEditing ? "Edit Note" : "Add Note"}</h2>
+      <div className="container">
+        <SearchBar search={search} setSearch={setSearch} />
 
-        <input
-          type="text"
-          placeholder="Enter Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+        <NoteForm
+          title={title}
+          setTitle={setTitle}
+          content={content}
+          setContent={setContent}
+          addNote={addNote}
+          isEditing={isEditing}
         />
 
-        <textarea
-          placeholder="Enter Content"
-          rows="5"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
+        <h2>📒 My Notes</h2>
 
-        <button onClick={addNote}>
-          {isEditing ? "Update Note" : "Add Note"}
-        </button>
-      </div>
+        <p className="note-count">
+          📝 Showing {filteredNotes.length} Notes
+        </p>
 
-      <h2>My Notes</h2>
-
-      <p>Total Notes: {notes.length}</p>
-
-      {notes.length === 0 ? (
-        <p>No notes found.</p>
-      ) : (
-        notes.map((note) => (
-          <div className="note-card" key={note._id}>
-            <h3>{note.title}</h3>
-
-            <p>{note.content}</p>
-
-            <div
-              style={{
-                marginTop: "15px",
-                display: "flex",
-                gap: "10px",
-              }}
-            >
-              <button
-                onClick={() => editNote(note)}
-                style={{
-                  backgroundColor: "orange",
-                  color: "white",
-                }}
-              >
-                ✏️ Edit
-              </button>
-
-              <button
-                onClick={() => deleteNote(note._id)}
-                style={{
-                  backgroundColor: "red",
-                  color: "white",
-                }}
-              >
-                🗑 Delete
-              </button>
-            </div>
+        {filteredNotes.length === 0 ? (
+          <div className="empty-state">
+            <h1>📭</h1>
+            <h2>No Notes Found</h2>
+            <p>Create your first note.</p>
           </div>
-        ))
-      )}
-    </div>
+        ) : (
+          filteredNotes.map((note) => (
+            <NoteCard
+              key={note._id}
+              note={note}
+              editNote={editNote}
+              deleteNote={deleteNote}
+            />
+          ))
+        )}
+      </div>
+    </>
   );
 }
 
