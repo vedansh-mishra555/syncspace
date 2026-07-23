@@ -30,7 +30,7 @@ function Home() {
 
       <p>Total Notes: {notes.length}</p>
 
-      <pre>{JSON.stringify(notes, null, 2)}</pre>
+    
 
       {notes.map((note) => (
         <div key={note._id}>
