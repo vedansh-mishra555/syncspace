@@ -4,6 +4,10 @@ import { useLocation } from "react-router-dom";
 import socket from "../services/socket";
 import ChatBox from "../components/ChatBox";
 import CodeEditor from "../components/CodeEditor";
+import Whiteboard from "../components/Whiteboard";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import "../styles/Room.css";
 
 function Room() {
   const location = useLocation();
@@ -18,9 +22,9 @@ function Room() {
   console.log("Welcome to SyncSpace");
 }`);
 
-  // =========================
+  // ===========================
   // Socket Listeners
-  // =========================
+  // ===========================
   useEffect(() => {
     socket.on("room-users", (roomUsers) => {
       setUsers(roomUsers);
@@ -41,9 +45,9 @@ function Room() {
     };
   }, []);
 
-  // =========================
+  // ===========================
   // Send Chat
-  // =========================
+  // ===========================
   const sendMessage = () => {
     if (!message.trim()) return;
 
@@ -56,9 +60,9 @@ function Room() {
     setMessage("");
   };
 
-  // =========================
-  // Live Code Sync
-  // =========================
+  // ===========================
+  // Live Code
+  // ===========================
   const handleCodeChange = (newCode) => {
     setCode(newCode);
 
@@ -69,76 +73,51 @@ function Room() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        background: "#0f172a",
-        color: "white",
-      }}
-    >
-      {/* LEFT PANEL */}
-      <div
-        style={{
-          width: "250px",
-          padding: "20px",
-          background: "#1e293b",
-          borderRight: "1px solid #334155",
-          overflowY: "auto",
-        }}
-      >
-        <h2>👥 Participants</h2>
+    <div className="room-page">
 
-        <hr />
+  <Navbar
+    room={room}
+    name={name}
+  />
 
-        <p>
-          <strong>Room:</strong> {room}
-        </p>
+  
+      {/* TOP SECTION */}
+      <div className="room-top">
 
-        <p>
-          <strong>You:</strong> {name}
-        </p>
-
-        <hr />
-
-        {users.length === 0 ? (
-          <p>No users connected.</p>
-        ) : (
-          users.map((user) => (
-            <div
-              key={user.id}
-              style={{
-                padding: "12px",
-                marginBottom: "10px",
-                background: "#334155",
-                borderRadius: "10px",
-              }}
-            >
-              🟢 {user.name}
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* CENTER PANEL */}
-      <div
-        style={{
-          flex: 1,
-        }}
-      >
-        <CodeEditor
-          code={code}
-          onCodeChange={handleCodeChange}
+        {/* SIDEBAR */}
+        <Sidebar
+          room={room}
+          name={name}
+          users={users}
         />
+
+        {/* CODE EDITOR */}
+        <div className="room-center">
+
+  <div className="editor-section">
+    <CodeEditor
+      code={code}
+      onCodeChange={handleCodeChange}
+    />
+  </div>
+
+  <div className="whiteboard-section">
+    <Whiteboard />
+  </div>
+
+</div>
+        {/* CHAT */}
+        <ChatBox
+          messages={messages}
+          message={message}
+          setMessage={setMessage}
+          sendMessage={sendMessage}
+        />
+
       </div>
 
-      {/* RIGHT PANEL */}
-      <ChatBox
-        messages={messages}
-        message={message}
-        setMessage={setMessage}
-        sendMessage={sendMessage}
-      />
+      {/* WHITEBOARD */}
+     
     </div>
   );
 }

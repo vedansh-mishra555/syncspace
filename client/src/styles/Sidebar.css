@@ -1,0 +1,45 @@
+.sidebar {
+  width: 260px;
+  background: #1e293b;
+  padding: 20px;
+  border-right: 1px solid #334155;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  margin-bottom: 15px;
+}
+
+.room-info {
+  margin: 20px 0;
+}
+
+.room-info span {
+  color: #cbd5e1;
+}
+
+.user-list {
+  margin-top: 20px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #334155;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.user-card:hover {
+  background: #475569;
+}
+
+.online-dot {
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+}

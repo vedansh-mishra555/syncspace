@@ -1,22 +1,22 @@
 import "../styles/Navbar.css";
 
-function Navbar() {
+function Navbar({ room, name }) {
   return (
-    <nav className="navbar">
-     <div style={{ textAlign: "center" }}>
-  <h1 className="logo">📝 SyncSpace</h1>
+    <div className="navbar">
 
-  <p
-    style={{
-      margin: 0,
-      opacity: 0.9,
-      fontSize: "14px",
-    }}
-  >
-    Your Personal Notes App
-  </p>
-</div>
-    </nav>
+      <div className="navbar-left">
+        🚀 <span>SyncSpace</span>
+      </div>
+
+      <div className="navbar-center">
+        Room: <strong>{room}</strong>
+      </div>
+
+      <div className="navbar-right">
+        👤 {name}
+      </div>
+
+    </div>
   );
 }
 

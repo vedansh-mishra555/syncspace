@@ -1,0 +1,28 @@
+.room-page {
+  height: 100vh;
+  display: flex;
+  background: #0f172a;
+  overflow: hidden;
+}
+
+.room-top {
+  display: flex;
+  flex: 1;
+}
+
+.room-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-section {
+  flex: 1;
+  min-height: 0;
+}
+
+.whiteboard-section {
+  height: 300px;
+  border-top: 2px solid #334155;
+  background: white;
+}

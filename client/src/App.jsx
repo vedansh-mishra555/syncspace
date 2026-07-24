@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import JoinRoom from "./pages/JoinRoom";
 import Home from "./pages/Home";
 import Room from "./pages/Room";
-
 function App() {
   return (
     <BrowserRouter>
