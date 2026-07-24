@@ -28,6 +28,9 @@ function socketHandler(io) {
     socket.on("send-message", (data) => {
       io.to(data.roomId).emit("receive-message", data);
     });
+    socket.on("code-change", ({ roomId, code }) => {
+  socket.to(roomId).emit("receive-code", code);
+});
 
     socket.on("disconnect", () => {
       const roomId = socket.roomId;
