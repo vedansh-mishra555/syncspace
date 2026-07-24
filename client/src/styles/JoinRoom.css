@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.join-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e293b,
+    #312e81
+  );
+}
+
+.join-card {
+  width: 420px;
+  padding: 40px;
+
+  border-radius: 20px;
+
+  background: rgba(255,255,255,.08);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow: 0 20px 40px rgba(0,0,0,.4);
+
+  text-align: center;
+}
+
+.join-card h1 {
+  color: white;
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.join-card p {
+  color: #d1d5db;
+  margin-bottom: 30px;
+}
+
+.join-card input {
+  width: 100%;
+  padding: 15px;
+
+  margin-bottom: 18px;
+
+  border: none;
+
+  outline: none;
+
+  border-radius: 12px;
+
+  font-size: 16px;
+}
+
+.join-card input:focus {
+  border: 2px solid #6366f1;
+}
+
+.join-card button {
+  width: 100%;
+
+  padding: 15px;
+
+  margin-top: 12px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  transition: .3s;
+}
+
+.join-card button:hover {
+  transform: translateY(-2px);
+}
+
+.join-card button:nth-of-type(1) {
+  background: #8b5cf6;
+  color: white;
+}
+
+.join-card button:nth-of-type(2) {
+  background: #3b82f6;
+  color: white;
+}
+
+.join-card button:nth-of-type(3) {
+  background: #10b981;
+  color: white;
+}
+
+.join-card button:nth-of-type(4) {
+  background: white;
+  color: #111827;
+}
