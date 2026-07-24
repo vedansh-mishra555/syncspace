@@ -24,6 +24,11 @@ function socketHandler(io) {
       console.log(`${userName} joined ${roomId}`);
     });
 
+    // Send Chat Message
+    socket.on("send-message", (data) => {
+      io.to(data.roomId).emit("receive-message", data);
+    });
+
     socket.on("disconnect", () => {
       const roomId = socket.roomId;
 
