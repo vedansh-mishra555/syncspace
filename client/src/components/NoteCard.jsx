@@ -1,3 +1,4 @@
+
 function NoteCard({ note, editNote, deleteNote }) {
   const formattedDate = new Date(note.createdAt).toLocaleString("en-IN", {
     day: "numeric",
