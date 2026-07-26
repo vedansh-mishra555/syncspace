@@ -1,45 +1,50 @@
-.sidebar {
-  width: 260px;
-  background: #1e293b;
-  padding: 20px;
-  border-right: 1px solid #334155;
-  overflow-y: auto;
+.sidebar{
+    background:#1e293b;
+    color:white;
+    padding:20px;
+    height:100%;
+    overflow-y:auto;
+    border-right:1px solid #334155;
 }
 
-.sidebar h2 {
-  margin-bottom: 15px;
+.sidebar h2{
+    margin-bottom:20px;
 }
 
-.room-info {
-  margin: 20px 0;
+.room-info{
+    margin:20px 0;
 }
 
-.room-info span {
-  color: #cbd5e1;
+.room-info p{
+    margin:10px 0 3px;
+    font-weight:bold;
 }
 
-.user-list {
-  margin-top: 20px;
+.room-info span{
+    color:#cbd5e1;
 }
 
-.user-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #334155;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  transition: 0.3s;
+.users-list{
+    margin-top:20px;
 }
 
-.user-card:hover {
-  background: #475569;
+.user-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    background:#334155;
+    border-radius:10px;
+    margin-bottom:10px;
 }
 
-.online-dot {
-  width: 10px;
-  height: 10px;
-  background: #22c55e;
-  border-radius: 50%;
+.online-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#22c55e;
+}
+
+.no-users{
+    color:#94a3b8;
 }

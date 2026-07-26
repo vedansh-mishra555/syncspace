@@ -1,28 +1,89 @@
-.navbar{
-    height:60px;
-    background:#111827;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 25px;
-    color:white;
-    border-bottom:1px solid #334155;
+.navbar {
+  height: 60px;
+  background: #111827;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  color: white;
+  border-bottom: 1px solid #334155;
 }
 
-.navbar-left{
-    font-size:22px;
-    font-weight:bold;
-    display:flex;
-    gap:10px;
-    align-items:center;
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: bold;
 }
 
-.navbar-center{
-    font-size:18px;
+.navbar-left span {
+  color: #38bdf8;
 }
 
-.navbar-right{
-    background:#1e293b;
-    padding:8px 15px;
-    border-radius:8px;
+.navbar-center {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.room-id {
+  font-size: 17px;
+}
+
+.copy-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.copy-btn:hover {
+  background: #1d4ed8;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1e293b;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-name {
+  background: #1e293b;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.leave-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.leave-btn:hover {
+  background: #dc2626;
 }

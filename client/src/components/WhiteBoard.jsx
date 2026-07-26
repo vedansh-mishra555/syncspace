@@ -3,11 +3,11 @@ import { Excalidraw } from "@excalidraw/excalidraw";
 function Whiteboard() {
   return (
     <div
-      style={{
-        height: "500px",
-        width: "100%",
-      }}
-    >
+  style={{
+    width: "100%",
+    height: "100%",
+  }}
+>
       <Excalidraw />
     </div>
   );

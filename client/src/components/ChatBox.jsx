@@ -16,7 +16,7 @@ function ChatBox({
       <div className="chat-messages">
 
         {messages.length === 0 ? (
-          <p style={{ textAlign: "center", opacity: 0.6 }}>
+          <p className="no-users">
             No messages yet...
           </p>
         ) : (

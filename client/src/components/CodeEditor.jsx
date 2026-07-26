@@ -3,7 +3,10 @@ import "../styles/CodeEditor.css";
 
 function CodeEditor({ code, onCodeChange }) {
   return (
-    <div className="editor-container">
+    <div
+  className="editor-container"
+  style={{ height: "100%" }}
+>
       <div className="editor-header">
         <div className="editor-left">
           <span className="dot red"></span>
