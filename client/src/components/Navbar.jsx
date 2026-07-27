@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import socket from "../services/socket";
 import "../styles/Navbar.css";
 
 function Navbar({ room, name }) {
+  const navigate = useNavigate();
+
   const [connected, setConnected] = useState(socket.connected);
 
   useEffect(() => {
@@ -29,10 +33,13 @@ function Navbar({ room, name }) {
       "Are you sure you want to leave the room?"
     );
 
-    if (confirmLeave) {
-      socket.disconnect();
-      window.location.href = "/";
-    }
+    if (!confirmLeave) return;
+
+    socket.disconnect();
+
+    toast.success("Left the room successfully!");
+
+    navigate("/");
   };
 
   return (
