@@ -1,7 +1,9 @@
+
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const codeRoutes = require("./routes/codeRoutes");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
@@ -16,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", noteRoutes);
+app.use("/api/code", codeRoutes);
 
 app.get("/", (req, res) => {
   res.send("🚀 SyncSpace Backend Running");
