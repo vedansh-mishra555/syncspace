@@ -56,4 +56,4 @@ npm run dev
 
 **Vedansh Mishra**
 
-Internship Project - Axlero Learning
+Internship Project - Axlero Solutions
