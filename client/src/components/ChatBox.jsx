@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import "../styles/ChatBox.css";
 
 function ChatBox({
@@ -6,6 +7,14 @@ function ChatBox({
   setMessage,
   sendMessage,
 }) {
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
 
@@ -16,20 +25,19 @@ function ChatBox({
       <div className="chat-messages">
 
         {messages.length === 0 ? (
-          <p className="no-users">
+          <p style={{ textAlign: "center", opacity: 0.6 }}>
             No messages yet...
           </p>
         ) : (
           messages.map((msg, index) => (
             <div className="message" key={index}>
-
               <strong>{msg.user}</strong>
-
               <p>{msg.text}</p>
-
             </div>
           ))
         )}
+
+        <div ref={messagesEndRef}></div>
 
       </div>
 
