@@ -1,72 +1,79 @@
 .editor-container {
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: #111827;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .editor-header {
-  height: 50px;
+  height: 55px;
   background: #1e293b;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px;
+  padding: 0 18px;
   border-bottom: 1px solid #334155;
 }
 
-.editor-body {
-  flex: 1;
-}
-
-.editor-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.red {
-  background: #ef4444;
-}
-
-.yellow {
-  background: #f59e0b;
-}
-
-.green {
-  background: #22c55e;
-}
-
-.editor-title {
-  color: white;
+.editor-header h3 {
+  color: #ffffff;
+  font-size: 18px;
   font-weight: 600;
-  margin-left: 10px;
+  margin: 0;
 }
 
-.editor-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.language {
-  color: #cbd5e1;
-}
-
-.run-btn {
+.copy-code-btn {
   background: #2563eb;
   color: white;
   border: none;
-  padding: 8px 15px;
+  outline: none;
+  padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.run-btn:hover {
+.copy-code-btn:hover {
   background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.copy-code-btn:active {
+  transform: scale(0.96);
+}
+
+.monaco-editor {
+  flex: 1;
+}
+
+.editor-footer {
+  height: 40px;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 15px;
+  color: #94a3b8;
+  font-size: 13px;
+  border-top: 1px solid #334155;
+}
+
+@media (max-width: 768px) {
+  .editor-header {
+    padding: 0 12px;
+  }
+
+  .editor-header h3 {
+    font-size: 15px;
+  }
+
+  .copy-code-btn {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
 }
