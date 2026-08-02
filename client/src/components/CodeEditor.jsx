@@ -38,7 +38,10 @@ function CodeEditor({ code, onCodeChange }) {
   return (
     <div className="editor-container">
       <div className="editor-header">
-        <h3>💻 Collaborative Code Editor</h3>
+        <div className="editor-title">
+  <h3>💻 Collaborative Code Editor</h3>
+  <span className="language-badge">JavaScript</span>
+</div>
 
         <div className="editor-actions">
           <button
