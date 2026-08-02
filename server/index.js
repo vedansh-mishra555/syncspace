@@ -23,6 +23,15 @@ app.use("/api/code", codeRoutes);
 app.get("/", (req, res) => {
   res.send("🚀 SyncSpace Backend Running");
 });
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "SyncSpace Backend is running successfully",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+  });
+});
 
 const server = http.createServer(app);
 
