@@ -87,3 +87,59 @@
 .leave-btn:hover {
   background: #dc2626;
 }
+
+.about-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.about-modal {
+  width: 430px;
+  max-width: 90%;
+  background: #1e293b;
+  color: white;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  animation: popup 0.25s ease;
+}
+
+.about-modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #38bdf8;
+}
+
+.about-modal p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.about-modal ul {
+  margin: 10px 0 20px;
+  padding-left: 20px;
+}
+
+.about-modal li {
+  margin: 8px 0;
+}
+
+@keyframes popup {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -8,9 +8,13 @@ import "../styles/Navbar.css";
 function Navbar({ room, name }) {
   const navigate = useNavigate();
 
-  const [connected, setConnected] = useState(socket.connected);
+  const [connected, setConnected] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
+    // Check current connection when component loads
+    setConnected(socket.connected);
+
     const onConnect = () => setConnected(true);
     const onDisconnect = () => setConnected(false);
 
@@ -43,51 +47,99 @@ function Navbar({ room, name }) {
   };
 
   return (
-    <div className="navbar">
-      {/* Left */}
-      <div className="navbar-left">
-        🚀 <span>SyncSpace</span>
-      </div>
+    <>
+      <div className="navbar">
+        {/* Left */}
+        <div className="navbar-left">
+          🚀 <span>SyncSpace</span>
+        </div>
 
-      {/* Center */}
-      <div className="navbar-center">
-        <span className="room-id">
-          Room: <strong>{room}</strong>
-        </span>
+        {/* Center */}
+        <div className="navbar-center">
+          <span className="room-id">
+            Room: <strong>{room}</strong>
+          </span>
 
-        <button
-          className="copy-btn"
-          onClick={copyRoom}
-        >
-          📋 Copy
-        </button>
+          <button className="copy-btn" onClick={copyRoom}>
+            📋 Copy
+          </button>
 
-        <div className="status">
-          <span
-            className="status-dot"
-            style={{
-              background: connected ? "#22c55e" : "#ef4444",
-            }}
-          ></span>
+          <button
+            className="copy-btn"
+            onClick={() => setShowAbout(true)}
+          >
+            ℹ️ About
+          </button>
 
-          {connected ? "Connected" : "Disconnected"}
+          <div className="status">
+            <span
+              className="status-dot"
+              style={{
+                background: connected ? "#22c55e" : "#ef4444",
+              }}
+            ></span>
+
+            {connected ? "Connected" : "Disconnected"}
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="navbar-right">
+          <span className="user-name">
+            👤 {name}
+          </span>
+
+          <button
+            className="leave-btn"
+            onClick={leaveRoom}
+          >
+            🚪 Leave
+          </button>
         </div>
       </div>
 
-      {/* Right */}
-      <div className="navbar-right">
-        <span className="user-name">
-          👤 {name}
-        </span>
+      {showAbout && (
+        <div className="about-overlay">
+          <div className="about-modal">
+            <h2>🚀 SyncSpace</h2>
 
-        <button
-          className="leave-btn"
-          onClick={leaveRoom}
-        >
-          🚪 Leave
-        </button>
-      </div>
-    </div>
+            <p>
+              <strong>Version:</strong> 1.0
+            </p>
+
+            <p>
+              <strong>Developer:</strong> Vedansh Mishra
+            </p>
+
+            <p>
+              <strong>Tech Stack:</strong>
+              <br />
+              React • Node.js • Express • MongoDB • Socket.IO • Monaco Editor
+            </p>
+
+            <p>
+              <strong>Features:</strong>
+            </p>
+
+            <ul>
+              <li>✅ Real-time Collaborative Coding</li>
+              <li>✅ Room-based Collaboration</li>
+              <li>✅ Live Chat</li>
+              <li>✅ Copy & Download Code</li>
+              <li>✅ Whiteboard</li>
+              <li>✅ Responsive UI</li>
+            </ul>
+
+            <button
+              className="leave-btn"
+              onClick={() => setShowAbout(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
