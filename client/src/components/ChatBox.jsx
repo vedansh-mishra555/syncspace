@@ -40,6 +40,11 @@ function ChatBox({
         <div ref={messagesEndRef}></div>
 
       </div>
+      onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    sendMessage();
+  }
+}}
 
       <div className="chat-input">
 
