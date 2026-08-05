@@ -8,18 +8,25 @@ import "../styles/Navbar.css";
 function Navbar({ room, name }) {
   const navigate = useNavigate();
 
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useState(socket.connected);
   const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
-    // Check current connection when component loads
-    setConnected(socket.connected);
+    const onConnect = () => {
+      console.log("✅ Socket Connected");
+      setConnected(true);
+    };
 
-    const onConnect = () => setConnected(true);
-    const onDisconnect = () => setConnected(false);
+    const onDisconnect = () => {
+      console.log("❌ Socket Disconnected");
+      setConnected(false);
+    };
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
+
+    // Update current state
+    setConnected(socket.connected);
 
     return () => {
       socket.off("connect", onConnect);
@@ -33,16 +40,10 @@ function Navbar({ room, name }) {
   };
 
   const leaveRoom = () => {
-    const confirmLeave = window.confirm(
-      "Are you sure you want to leave the room?"
-    );
-
-    if (!confirmLeave) return;
+    if (!window.confirm("Are you sure you want to leave the room?")) return;
 
     socket.disconnect();
-
     toast.success("Left the room successfully!");
-
     navigate("/");
   };
 
@@ -75,10 +76,9 @@ function Navbar({ room, name }) {
             <span
               className="status-dot"
               style={{
-                background: connected ? "#22c55e" : "#ef4444",
+                backgroundColor: connected ? "#22c55e" : "#ef4444",
               }}
-            ></span>
-
+            />
             {connected ? "Connected" : "Disconnected"}
           </div>
         </div>
@@ -89,10 +89,7 @@ function Navbar({ room, name }) {
             👤 {name}
           </span>
 
-          <button
-            className="leave-btn"
-            onClick={leaveRoom}
-          >
+          <button className="leave-btn" onClick={leaveRoom}>
             🚪 Leave
           </button>
         </div>
@@ -114,7 +111,7 @@ function Navbar({ room, name }) {
             <p>
               <strong>Tech Stack:</strong>
               <br />
-              React • Node.js • Express • MongoDB • Socket.IO • Monaco Editor
+              React • Node.js • Express • MongoDB • Socket.IO • Monaco Editor • Excalidraw
             </p>
 
             <p>
@@ -125,8 +122,9 @@ function Navbar({ room, name }) {
               <li>✅ Real-time Collaborative Coding</li>
               <li>✅ Room-based Collaboration</li>
               <li>✅ Live Chat</li>
+              <li>✅ Shared Whiteboard</li>
+              <li>✅ Collaborative Notes</li>
               <li>✅ Copy & Download Code</li>
-              <li>✅ Whiteboard</li>
               <li>✅ Responsive UI</li>
             </ul>
 

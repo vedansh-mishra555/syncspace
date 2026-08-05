@@ -23,17 +23,33 @@ function Room() {
 }`);
 
   // ===========================
-  // Socket Listeners
+  // Socket Connection
   // ===========================
   useEffect(() => {
+    if (!room || !name) return;
+
+    // Connect only once
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    // Join room
+    socket.emit("join-room", {
+      roomId: room,
+      userName: name,
+    });
+
+    // Users
     socket.on("room-users", (roomUsers) => {
       setUsers(roomUsers);
     });
 
+    // Chat
     socket.on("receive-message", (data) => {
       setMessages((prev) => [...prev, data]);
     });
 
+    // Code Sync
     socket.on("receive-code", (newCode) => {
       setCode(newCode);
     });
@@ -43,7 +59,7 @@ function Room() {
       socket.off("receive-message");
       socket.off("receive-code");
     };
-  }, []);
+  }, [room, name]);
 
   // ===========================
   // Send Chat
@@ -61,7 +77,7 @@ function Room() {
   };
 
   // ===========================
-  // Live Code
+  // Code Sync
   // ===========================
   const handleCodeChange = (newCode) => {
     setCode(newCode);
@@ -75,38 +91,34 @@ function Room() {
   return (
     <div className="room-page">
 
-  <Navbar
-    room={room}
-    name={name}
-  />
+      <Navbar
+        room={room}
+        name={name}
+      />
 
-  
-      {/* TOP SECTION */}
       <div className="room-top">
 
-        {/* SIDEBAR */}
         <Sidebar
           room={room}
           name={name}
           users={users}
         />
 
-        {/* CODE EDITOR */}
         <div className="room-center">
 
-  <div className="editor-section">
-    <CodeEditor
-      code={code}
-      onCodeChange={handleCodeChange}
-    />
-  </div>
+          <div className="editor-section">
+            <CodeEditor
+              code={code}
+              onCodeChange={handleCodeChange}
+            />
+          </div>
 
-  <div className="whiteboard-section">
-    <Whiteboard />
-  </div>
+          <div className="whiteboard-section">
+            <Whiteboard />
+          </div>
 
-</div>
-        {/* CHAT */}
+        </div>
+
         <ChatBox
           messages={messages}
           message={message}
@@ -116,8 +128,6 @@ function Room() {
 
       </div>
 
-      {/* WHITEBOARD */}
-     
     </div>
   );
 }
