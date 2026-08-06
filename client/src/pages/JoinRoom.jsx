@@ -28,26 +28,25 @@ function JoinRoom() {
     toast.success("Room ID Copied!");
   };
 
- const handleJoin = () => {
-  if (!name || !room) {
-    toast.warning("Please fill all fields!");
-    return;
-  }
+  const handleJoin = () => {
+    if (!name.trim() || !room.trim()) {
+      toast.warning("Please fill all fields!");
+      return;
+    }
 
-  socket.connect();
+    // Connect socket if not connected
+    if (!socket.connected) {
+      socket.connect();
+    }
 
-  socket.emit("join-room", {
-    roomId: room,
-    userName: name,
-  });
+    navigate("/room", {
+      state: {
+        room,
+        name,
+      },
+    });
+  };
 
-  navigate("/room", {
-    state: {
-      room,
-      name,
-    },
-  });
-};
   return (
     <div className="join-page">
       <div className="join-card">
@@ -66,7 +65,7 @@ function JoinRoom() {
           type="text"
           placeholder="Enter Room ID"
           value={room}
-          onChange={(e) => setRoom(e.target.value)}
+          onChange={(e) => setRoom(e.target.value.toUpperCase())}
         />
 
         <button onClick={generateRoom}>

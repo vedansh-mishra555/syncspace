@@ -17,15 +17,19 @@ function ChatBox({
 
   return (
     <div className="chat-container">
-
       <div className="chat-header">
         💬 Room Chat
       </div>
 
       <div className="chat-messages">
-
         {messages.length === 0 ? (
-          <p style={{ textAlign: "center", opacity: 0.6 }}>
+          <p
+            style={{
+              textAlign: "center",
+              opacity: 0.6,
+              color: "white",
+            }}
+          >
             No messages yet...
           </p>
         ) : (
@@ -38,16 +42,9 @@ function ChatBox({
         )}
 
         <div ref={messagesEndRef}></div>
-
       </div>
-      onKeyDown={(e) => {
-  if (e.key === "Enter") {
-    sendMessage();
-  }
-}}
 
       <div className="chat-input">
-
         <input
           type="text"
           placeholder="Type a message..."
@@ -63,9 +60,7 @@ function ChatBox({
         <button onClick={sendMessage}>
           Send
         </button>
-
       </div>
-
     </div>
   );
 }

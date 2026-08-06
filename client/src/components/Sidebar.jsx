@@ -4,34 +4,34 @@ function Sidebar({ room, name, users }) {
   return (
     <div className="sidebar">
 
-      <h2>👥 Participants</h2>
+      <h2 className="sidebar-title">👥 Participants</h2>
 
       <hr />
 
       <div className="room-info">
-        <p><strong>Room</strong></p>
-        <span>{room}</span>
+        <h3>Room</h3>
+        <p>{room}</p>
+      </div>
 
-        <p><strong>You</strong></p>
-        <span>{name}</span>
+      <div className="user-info">
+        <h3>You</h3>
+        <p>{name}</p>
       </div>
 
       <hr />
 
-      <div className="users-list">
+      <div className="participants-list">
+        <h3>Connected Users</h3>
 
-        {users.length === 0 ? (
-          <p className="no-users">No users connected.</p>
-        ) : (
+        {users && users.length > 0 ? (
           users.map((user) => (
-            <div className="user-card" key={user.id}>
-              <div className="online-dot"></div>
-
-              <span>{user.name}</span>
+            <div className="participant" key={user.id}>
+              🟢 {user.name}
             </div>
           ))
+        ) : (
+          <p>No users connected.</p>
         )}
-
       </div>
 
     </div>
