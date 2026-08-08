@@ -1,0 +1,26 @@
+.search-notes {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 18px;
+  margin: 15px 0 25px 0;
+
+  border: 1px solid #334155;
+  border-radius: 10px;
+
+  background: #0f172a;
+  color: white;
+
+  font-size: 16px;
+  outline: none;
+
+  transition: 0.3s;
+}
+
+.search-notes::placeholder {
+  color: #94a3b8;
+}
+
+.search-notes:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
