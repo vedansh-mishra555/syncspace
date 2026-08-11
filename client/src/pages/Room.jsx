@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import socket from "../services/socket";
+
 import ChatBox from "../components/ChatBox";
 import CodeEditor from "../components/CodeEditor";
 import Whiteboard from "../components/Whiteboard";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+
 import "../styles/Room.css";
 
 function Room() {
@@ -23,46 +25,95 @@ function Room() {
 }`);
 
   // ===========================
-  // Socket Connection
+  // SOCKET CONNECTION
   // ===========================
   useEffect(() => {
     if (!room || !name) return;
 
-    // Connect only once
+    // Connect socket
     if (!socket.connected) {
       socket.connect();
     }
 
-    // Join room
-    socket.emit("join-room", {
-      roomId: room,
-      userName: name,
-    });
+    // ===========================
+    // JOIN ROOM
+    // ===========================
+    const joinRoom = () => {
+      socket.emit("join-room", {
+        roomId: room,
+        userName: name,
+      });
+    };
 
-    // Users
-    socket.on("room-users", (roomUsers) => {
+    // If already connected
+    if (socket.connected) {
+      joinRoom();
+    }
+
+    // If connection happens after this component loads
+    socket.on("connect", joinRoom);
+
+    // ===========================
+    // USERS
+    // ===========================
+    const handleUsers = (roomUsers) => {
       setUsers(roomUsers);
-    });
+    };
 
-    // Chat
-    socket.on("receive-message", (data) => {
-      setMessages((prev) => [...prev, data]);
-    });
+    socket.on("room-users", handleUsers);
 
-    // Code Sync
-    socket.on("receive-code", (newCode) => {
+    // ===========================
+    // CHAT
+    // ===========================
+    const handleMessage = (data) => {
+      setMessages((prev) => [
+        ...prev,
+        data,
+      ]);
+    };
+
+    socket.on(
+      "receive-message",
+      handleMessage
+    );
+
+    // ===========================
+    // CODE
+    // ===========================
+    const handleCode = (newCode) => {
       setCode(newCode);
-    });
+    };
 
+    socket.on(
+      "receive-code",
+      handleCode
+    );
+
+    // ===========================
+    // CLEANUP
+    // ===========================
     return () => {
-      socket.off("room-users");
-      socket.off("receive-message");
-      socket.off("receive-code");
+      socket.off("connect", joinRoom);
+
+      socket.off(
+        "room-users",
+        handleUsers
+      );
+
+      socket.off(
+        "receive-message",
+        handleMessage
+      );
+
+      socket.off(
+        "receive-code",
+        handleCode
+      );
     };
   }, [room, name]);
 
   // ===========================
-  // Send Chat
+  // SEND CHAT
   // ===========================
   const sendMessage = () => {
     if (!message.trim()) return;
@@ -77,7 +128,7 @@ function Room() {
   };
 
   // ===========================
-  // Code Sync
+  // CODE CHANGE
   // ===========================
   const handleCodeChange = (newCode) => {
     setCode(newCode);
@@ -88,24 +139,58 @@ function Room() {
     });
   };
 
+  // ===========================
+  // INVALID ROOM
+  // ===========================
+  if (!room || !name) {
+    return (
+      <div
+        style={{
+          color: "white",
+          background: "#0f172a",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "24px",
+        }}
+      >
+        Invalid room. Please join a room again.
+      </div>
+    );
+  }
+
   return (
     <div className="room-page">
 
+      {/* ===========================
+          NAVBAR
+      =========================== */}
       <Navbar
         room={room}
         name={name}
       />
 
+      {/* ===========================
+          MAIN ROOM
+      =========================== */}
       <div className="room-top">
 
+        {/* ===========================
+            SIDEBAR
+        =========================== */}
         <Sidebar
           room={room}
           name={name}
           users={users}
         />
 
+        {/* ===========================
+            CENTER
+        =========================== */}
         <div className="room-center">
 
+          {/* CODE EDITOR */}
           <div className="editor-section">
             <CodeEditor
               code={code}
@@ -113,12 +198,16 @@ function Room() {
             />
           </div>
 
+          {/* WHITEBOARD */}
           <div className="whiteboard-section">
-            <Whiteboard />
+            <Whiteboard room={room} />
           </div>
 
         </div>
 
+        {/* ===========================
+            CHAT
+        =========================== */}
         <ChatBox
           messages={messages}
           message={message}
@@ -127,7 +216,6 @@ function Room() {
         />
 
       </div>
-
     </div>
   );
 }

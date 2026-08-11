@@ -1,47 +1,99 @@
 .editor-container {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
-  background: #111827;
-  border-radius: 10px;
+  background: #0f172a;
   overflow: hidden;
 }
 
+/* ===========================
+   EDITOR HEADER
+=========================== */
+
 .editor-header {
-  height: 55px;
-  background: #1e293b;
+  min-height: 60px;
+
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 18px;
+  justify-content: space-between;
+
+  padding: 10px 15px;
+
+  background: #1e293b;
+
   border-bottom: 1px solid #334155;
 }
 
-.editor-header h3 {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
+.editor-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
+
+.editor-title h3 {
+  margin: 0;
+
+  color: white;
+
+  font-size: 18px;
+}
+
+.language-badge {
+  background: #f7df1e;
+
+  color: #111827;
+
+  padding: 4px 10px;
+
+  border-radius: 6px;
+
+  font-size: 12px;
+
+  font-weight: bold;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
 
 .editor-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
-.copy-code-btn,
-.download-code-btn {
-  color: white;
+.editor-actions button {
   border: none;
-  outline: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+
+  border-radius: 6px;
+
+  padding: 9px 12px;
+
+  color: white;
+
   cursor: pointer;
-  font-size: 14px;
+
   font-weight: 600;
-  transition: all 0.3s ease;
+
+  transition: 0.2s;
 }
+
+/* RUN */
+
+.run-code-btn {
+  background: #16a34a;
+}
+
+.run-code-btn:hover {
+  background: #15803d;
+}
+
+.run-code-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* COPY */
 
 .copy-code-btn {
   background: #2563eb;
@@ -49,58 +101,120 @@
 
 .copy-code-btn:hover {
   background: #1d4ed8;
-  transform: translateY(-2px);
 }
 
+/* DOWNLOAD */
+
 .download-code-btn {
-  background: #16a34a;
+  background: #7c3aed;
 }
 
 .download-code-btn:hover {
-  background: #15803d;
-  transform: translateY(-2px);
+  background: #6d28d9;
 }
 
-.copy-code-btn:active,
-.download-code-btn:active {
-  transform: scale(0.96);
-}
+/* ===========================
+   MONACO EDITOR
+=========================== */
 
-.monaco-editor {
+.monaco-wrapper {
   flex: 1;
+
+  min-height: 0;
+
+  overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  .editor-header {
-    padding: 0 12px;
-  }
+/* ===========================
+   OUTPUT
+=========================== */
 
-  .editor-header h3 {
-    font-size: 15px;
+.output-container {
+  height: 150px;
+
+  background: #020617;
+
+  border-top: 2px solid #334155;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.output-header {
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 15px;
+
+  background: #1e293b;
+
+  color: white;
+
+  font-weight: bold;
+}
+
+.output-header button {
+  border: none;
+
+  background: #475569;
+
+  color: white;
+
+  padding: 5px 10px;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+.output-header button:hover {
+  background: #64748b;
+}
+
+.output-content {
+  flex: 1;
+
+  margin: 0;
+
+  padding: 12px 15px;
+
+  overflow-y: auto;
+
+  color: #e2e8f0;
+
+  font-family: monospace;
+
+  font-size: 14px;
+
+  white-space: pre-wrap;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 900px) {
+  .editor-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 10px;
   }
 
   .editor-actions {
-    gap: 6px;
+    width: 100%;
+
+    flex-wrap: wrap;
   }
 
-  .copy-code-btn,
-  .download-code-btn {
-    padding: 7px 12px;
-    font-size: 12px;
+  .editor-actions button {
+    flex: 1;
   }
-}
-.editor-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.language-badge {
-  background: #f59e0b;
-  color: #111827;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
 }
