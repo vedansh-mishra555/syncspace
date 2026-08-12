@@ -11,60 +11,93 @@ function Navbar({ room, name }) {
   const [connected, setConnected] = useState(socket.connected);
   const [showAbout, setShowAbout] = useState(false);
 
+  // ============================
+  // SOCKET CONNECTION STATUS
+  // ============================
   useEffect(() => {
-    const onConnect = () => {
+    const handleConnect = () => {
       console.log("✅ Socket Connected");
       setConnected(true);
     };
 
-    const onDisconnect = () => {
+    const handleDisconnect = () => {
       console.log("❌ Socket Disconnected");
       setConnected(false);
     };
 
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
-    // Update current state
-    setConnected(socket.connected);
+    socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
 
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
+      socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
     };
   }, []);
 
-  const copyRoom = () => {
-    navigator.clipboard.writeText(room);
-    toast.success("Room ID Copied!");
+  // ============================
+  // COPY ROOM ID
+  // ============================
+  const copyRoom = async () => {
+    if (!room) {
+      toast.warning("Room ID not found!");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(room);
+      toast.success("Room ID Copied!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to copy Room ID");
+    }
   };
 
+  // ============================
+  // LEAVE ROOM
+  // ============================
   const leaveRoom = () => {
-    if (!window.confirm("Are you sure you want to leave the room?")) return;
+    const confirmLeave = window.confirm(
+      "Are you sure you want to leave the room?"
+    );
+
+    if (!confirmLeave) return;
 
     socket.disconnect();
+
     toast.success("Left the room successfully!");
+
     navigate("/");
   };
 
   return (
     <>
+      {/* ============================
+          NAVBAR
+      ============================ */}
       <div className="navbar">
-        {/* Left */}
+
+        {/* LEFT */}
         <div className="navbar-left">
           🚀 <span>SyncSpace</span>
         </div>
 
-        {/* Center */}
+        {/* CENTER */}
         <div className="navbar-center">
+
+          {/* ROOM ID */}
           <span className="room-id">
             Room: <strong>{room}</strong>
           </span>
 
-          <button className="copy-btn" onClick={copyRoom}>
+          {/* COPY ROOM */}
+          <button
+            className="copy-btn"
+            onClick={copyRoom}
+          >
             📋 Copy
           </button>
 
+          {/* ABOUT */}
           <button
             className="copy-btn"
             onClick={() => setShowAbout(true)}
@@ -72,32 +105,61 @@ function Navbar({ room, name }) {
             ℹ️ About
           </button>
 
+          {/* CONNECTION STATUS */}
           <div className="status">
+
             <span
               className="status-dot"
               style={{
-                backgroundColor: connected ? "#22c55e" : "#ef4444",
+                backgroundColor: connected
+                  ? "#22c55e"
+                  : "#ef4444",
               }}
-            />
-            {connected ? "Connected" : "Disconnected"}
+            ></span>
+
+            <span>
+              {connected
+                ? "Connected"
+                : "Disconnected"}
+            </span>
+
           </div>
+
         </div>
 
-        {/* Right */}
+        {/* RIGHT */}
         <div className="navbar-right">
+
+          {/* USER NAME */}
           <span className="user-name">
             👤 {name}
           </span>
 
-          <button className="leave-btn" onClick={leaveRoom}>
+          {/* LEAVE */}
+          <button
+            className="leave-btn"
+            onClick={leaveRoom}
+          >
             🚪 Leave
           </button>
+
         </div>
       </div>
 
+      {/* ============================
+          ABOUT MODAL
+      ============================ */}
       {showAbout && (
-        <div className="about-overlay">
-          <div className="about-modal">
+        <div
+          className="about-overlay"
+          onClick={() => setShowAbout(false)}
+        >
+
+          <div
+            className="about-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+
             <h2>🚀 SyncSpace</h2>
 
             <p>
@@ -111,7 +173,8 @@ function Navbar({ room, name }) {
             <p>
               <strong>Tech Stack:</strong>
               <br />
-              React • Node.js • Express • MongoDB • Socket.IO • Monaco Editor • Excalidraw
+              React • Node.js • Express • MongoDB •
+              Socket.IO • Monaco Editor • Excalidraw
             </p>
 
             <p>
@@ -125,6 +188,7 @@ function Navbar({ room, name }) {
               <li>✅ Shared Whiteboard</li>
               <li>✅ Collaborative Notes</li>
               <li>✅ Copy & Download Code</li>
+              <li>✅ Meeting Timer</li>
               <li>✅ Responsive UI</li>
             </ul>
 
@@ -134,7 +198,9 @@ function Navbar({ room, name }) {
             >
               Close
             </button>
+
           </div>
+
         </div>
       )}
     </>
