@@ -4,55 +4,96 @@ import { Excalidraw } from "@excalidraw/excalidraw";
 import socket from "../services/socket";
 
 function Whiteboard({ room }) {
-  const excalidrawAPI = useRef(null);
+  const excalidrawAPIRef = useRef(null);
 
-  const isRemoteUpdate = useRef(false);
+  // Prevent remote updates from interfering
+  // with the user's current drawing
+  const isApplyingRemoteUpdate =
+    useRef(false);
 
-  // ===========================
+  // =========================================
   // RECEIVE WHITEBOARD
-  // ===========================
+  // =========================================
+
   useEffect(() => {
-    const handleWhiteboardUpdate = (elements) => {
-      if (!excalidrawAPI.current) return;
+    if (!room) return;
 
-      isRemoteUpdate.current = true;
+    const handleWhiteboardState = (
+      receivedElements
+    ) => {
+      console.log(
+        "🎨 Whiteboard received:",
+        receivedElements
+      );
 
-      excalidrawAPI.current.updateScene({
-        elements,
+      if (!excalidrawAPIRef.current) {
+        return;
+      }
+
+      isApplyingRemoteUpdate.current =
+        true;
+
+      excalidrawAPIRef.current.updateScene({
+        elements:
+          receivedElements || [],
       });
 
+      // Allow local changes again
       setTimeout(() => {
-        isRemoteUpdate.current = false;
-      }, 0);
+        isApplyingRemoteUpdate.current =
+          false;
+      }, 50);
     };
 
     socket.on(
-      "whiteboard-update",
-      handleWhiteboardUpdate
+      "whiteboard-state",
+      handleWhiteboardState
+    );
+
+    // Ask server for existing board
+    socket.emit(
+      "whiteboard-request",
+      room
     );
 
     return () => {
       socket.off(
-        "whiteboard-update",
-        handleWhiteboardUpdate
+        "whiteboard-state",
+        handleWhiteboardState
       );
     };
-  }, []);
+  }, [room]);
 
-  // ===========================
-  // WHITEBOARD CHANGE
-  // ===========================
+  // =========================================
+  // LOCAL WHITEBOARD CHANGE
+  // =========================================
+
   const handleChange = (elements) => {
     if (!room) return;
 
-    // Don't send remote changes back to server
-    if (isRemoteUpdate.current) return;
+    // Don't send remote updates back
+    if (
+      isApplyingRemoteUpdate.current
+    ) {
+      return;
+    }
 
-    socket.emit("whiteboard-change", {
-      roomId: room,
-      elements,
-    });
+    if (!socket.connected) {
+      return;
+    }
+
+    socket.emit(
+      "whiteboard-change",
+      {
+        roomId: room,
+        elements,
+      }
+    );
   };
+
+  // =========================================
+  // RENDER
+  // =========================================
 
   return (
     <div
@@ -63,7 +104,8 @@ function Whiteboard({ room }) {
     >
       <Excalidraw
         excalidrawAPI={(api) => {
-          excalidrawAPI.current = api;
+          excalidrawAPIRef.current =
+            api;
         }}
         onChange={handleChange}
       />

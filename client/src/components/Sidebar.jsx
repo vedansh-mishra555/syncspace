@@ -1,10 +1,17 @@
+import MeetingTimer from "./MeetingTimer";
 import "../styles/Sidebar.css";
 
-function Sidebar({ room, name, users }) {
+function Sidebar({
+  room,
+  name,
+  users,
+}) {
   return (
     <div className="sidebar">
 
-      <h2 className="sidebar-title">👥 Participants</h2>
+      <h2 className="sidebar-title">
+        👥 Participants
+      </h2>
 
       <hr />
 
@@ -12,6 +19,8 @@ function Sidebar({ room, name, users }) {
         <h3>Room</h3>
         <p>{room}</p>
       </div>
+
+      <MeetingTimer />
 
       <div className="user-info">
         <h3>You</h3>
@@ -25,7 +34,10 @@ function Sidebar({ room, name, users }) {
 
         {users && users.length > 0 ? (
           users.map((user) => (
-            <div className="participant" key={user.id}>
+            <div
+              className="participant"
+              key={user.id}
+            >
               🟢 {user.name}
             </div>
           ))
@@ -33,7 +45,6 @@ function Sidebar({ room, name, users }) {
           <p>No users connected.</p>
         )}
       </div>
-
     </div>
   );
 }

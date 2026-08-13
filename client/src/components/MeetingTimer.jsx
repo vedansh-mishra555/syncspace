@@ -12,17 +12,25 @@ function MeetingTimer() {
       setSeconds((prev) => prev + 1);
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+    };
   }, [running]);
 
   const formatTime = () => {
     const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
+
+    const minutes = Math.floor(
+      (seconds % 3600) / 60
+    );
+
+    const remainingSeconds = seconds % 60;
 
     return `${String(hours).padStart(2, "0")}:${String(
       minutes
-    ).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    ).padStart(2, "0")}:${String(
+      remainingSeconds
+    ).padStart(2, "0")}`;
   };
 
   const resetTimer = () => {
@@ -41,7 +49,9 @@ function MeetingTimer() {
       </div>
 
       <div className="timer-buttons">
-        <button onClick={() => setRunning(!running)}>
+        <button
+          onClick={() => setRunning(!running)}
+        >
           {running ? "⏸ Pause" : "▶ Resume"}
         </button>
 

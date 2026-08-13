@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import socket from "../services/socket";
 
@@ -13,8 +13,13 @@ import "../styles/Room.css";
 
 function Room() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { room, name } = location.state || {};
+
+  // =========================================
+  // STATE
+  // =========================================
 
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -24,21 +29,37 @@ function Room() {
   console.log("Welcome to SyncSpace");
 }`);
 
-  // ===========================
+  // =========================================
+  // CHECK ROOM DETAILS
+  // =========================================
+
+  useEffect(() => {
+    if (!room || !name) {
+      navigate("/");
+    }
+  }, [room, name, navigate]);
+
+  // =========================================
   // SOCKET CONNECTION
-  // ===========================
+  // =========================================
+
   useEffect(() => {
     if (!room || !name) return;
 
-    // Connect socket
+    // Connect socket if not connected
     if (!socket.connected) {
       socket.connect();
     }
 
-    // ===========================
+    // =======================================
     // JOIN ROOM
-    // ===========================
+    // =======================================
+
     const joinRoom = () => {
+      console.log(
+        `🚀 Joining room ${room} as ${name}`
+      );
+
       socket.emit("join-room", {
         roomId: room,
         userName: name,
@@ -50,22 +71,37 @@ function Room() {
       joinRoom();
     }
 
-    // If connection happens after this component loads
+    // If connection happens now
     socket.on("connect", joinRoom);
 
-    // ===========================
+    // =======================================
     // USERS
-    // ===========================
-    const handleUsers = (roomUsers) => {
-      setUsers(roomUsers);
+    // =======================================
+
+    const handleRoomUsers = (roomUsers) => {
+      console.log(
+        "👥 Room Users:",
+        roomUsers
+      );
+
+      setUsers(roomUsers || []);
     };
 
-    socket.on("room-users", handleUsers);
+    socket.on(
+      "room-users",
+      handleRoomUsers
+    );
 
-    // ===========================
+    // =======================================
     // CHAT
-    // ===========================
-    const handleMessage = (data) => {
+    // =======================================
+
+    const handleReceiveMessage = (data) => {
+      console.log(
+        "💬 Message:",
+        data
+      );
+
       setMessages((prev) => [
         ...prev,
         data,
@@ -74,64 +110,85 @@ function Room() {
 
     socket.on(
       "receive-message",
-      handleMessage
+      handleReceiveMessage
     );
 
-    // ===========================
-    // CODE
-    // ===========================
-    const handleCode = (newCode) => {
+    // =======================================
+    // CODE SYNC
+    // =======================================
+
+    const handleReceiveCode = (newCode) => {
+      console.log(
+        "💻 Code received"
+      );
+
       setCode(newCode);
     };
 
     socket.on(
       "receive-code",
-      handleCode
+      handleReceiveCode
     );
 
-    // ===========================
+    // =======================================
     // CLEANUP
-    // ===========================
+    // =======================================
+
     return () => {
-      socket.off("connect", joinRoom);
+      socket.off(
+        "connect",
+        joinRoom
+      );
 
       socket.off(
         "room-users",
-        handleUsers
+        handleRoomUsers
       );
 
       socket.off(
         "receive-message",
-        handleMessage
+        handleReceiveMessage
       );
 
       socket.off(
         "receive-code",
-        handleCode
+        handleReceiveCode
       );
     };
   }, [room, name]);
 
-  // ===========================
-  // SEND CHAT
-  // ===========================
+  // =========================================
+  // SEND MESSAGE
+  // =========================================
+
   const sendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim()) {
+      return;
+    }
+
+    if (!socket.connected) {
+      return;
+    }
 
     socket.emit("send-message", {
       roomId: room,
       user: name,
-      text: message,
+      text: message.trim(),
     });
 
     setMessage("");
   };
 
-  // ===========================
+  // =========================================
   // CODE CHANGE
-  // ===========================
+  // =========================================
+
   const handleCodeChange = (newCode) => {
     setCode(newCode);
+
+    if (!socket.connected) {
+      return;
+    }
 
     socket.emit("code-change", {
       roomId: room,
@@ -139,75 +196,67 @@ function Room() {
     });
   };
 
-  // ===========================
-  // INVALID ROOM
-  // ===========================
+  // =========================================
+  // NO ROOM
+  // =========================================
+
   if (!room || !name) {
-    return (
-      <div
-        style={{
-          color: "white",
-          background: "#0f172a",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "24px",
-        }}
-      >
-        Invalid room. Please join a room again.
-      </div>
-    );
+    return null;
   }
+
+  // =========================================
+  // UI
+  // =========================================
 
   return (
     <div className="room-page">
 
-      {/* ===========================
-          NAVBAR
-      =========================== */}
+      {/* ================= NAVBAR ================= */}
+
       <Navbar
         room={room}
         name={name}
       />
 
-      {/* ===========================
-          MAIN ROOM
-      =========================== */}
+      {/* ================= ROOM CONTENT ================= */}
+
       <div className="room-top">
 
-        {/* ===========================
-            SIDEBAR
-        =========================== */}
+        {/* ================= SIDEBAR ================= */}
+
         <Sidebar
           room={room}
           name={name}
           users={users}
         />
 
-        {/* ===========================
-            CENTER
-        =========================== */}
+        {/* ================= CENTER ================= */}
+
         <div className="room-center">
 
           {/* CODE EDITOR */}
+
           <div className="editor-section">
             <CodeEditor
               code={code}
-              onCodeChange={handleCodeChange}
+              onCodeChange={
+                handleCodeChange
+              }
             />
           </div>
 
           {/* WHITEBOARD */}
+
           <div className="whiteboard-section">
-            <Whiteboard room={room} />
+            <Whiteboard
+              room={room}
+            />
           </div>
 
         </div>
 
-        {/* ===========================
-            CHAT
-        =========================== */}
+        {/* ================= CHAT ================= */}
+
         <ChatBox
           messages={messages}
           message={message}

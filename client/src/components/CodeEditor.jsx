@@ -1,28 +1,28 @@
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
 import "../styles/CodeEditor.css";
 
 function CodeEditor({ code, onCodeChange }) {
   const [output, setOutput] = useState("");
-  const [running, setRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
-  // ===========================
+  // ============================
   // COPY CODE
-  // ===========================
+  // ============================
   const copyCode = async () => {
     try {
       await navigator.clipboard.writeText(code);
       toast.success("Code copied successfully!");
-    } catch {
+    } catch (error) {
+      console.error(error);
       toast.error("Failed to copy code.");
     }
   };
 
-  // ===========================
+  // ============================
   // DOWNLOAD CODE
-  // ===========================
+  // ============================
   const downloadCode = () => {
     const blob = new Blob([code], {
       type: "text/javascript",
@@ -46,32 +46,52 @@ function CodeEditor({ code, onCodeChange }) {
     toast.success("Code downloaded successfully!");
   };
 
-  // ===========================
+  // ============================
   // RUN CODE
-  // ===========================
+  // ============================
   const runCode = () => {
-    setRunning(true);
+    setIsRunning(true);
     setOutput("");
 
     try {
-      let result = "";
+      const logs = [];
 
+      // Capture console.log
       const customConsole = {
         log: (...args) => {
-          result += args
-            .map((item) => {
-              if (typeof item === "object") {
-                return JSON.stringify(item);
-              }
+          logs.push(
+            args
+              .map((arg) => {
+                if (typeof arg === "object") {
+                  return JSON.stringify(arg, null, 2);
+                }
 
-              return String(item);
-            })
-            .join(" ");
+                return String(arg);
+              })
+              .join(" ")
+          );
+        },
 
-          result += "\n";
+        error: (...args) => {
+          logs.push(
+            "ERROR: " +
+              args
+                .map((arg) => String(arg))
+                .join(" ")
+          );
+        },
+
+        warn: (...args) => {
+          logs.push(
+            "WARNING: " +
+              args
+                .map((arg) => String(arg))
+                .join(" ")
+          );
         },
       };
 
+      // Execute JavaScript
       const executeCode = new Function(
         "console",
         code
@@ -79,22 +99,24 @@ function CodeEditor({ code, onCodeChange }) {
 
       executeCode(customConsole);
 
-      setOutput(
-        result || "Code executed successfully."
-      );
+      if (logs.length === 0) {
+        setOutput("Code executed successfully.\nNo output.");
+      } else {
+        setOutput(logs.join("\n"));
+      }
 
       toast.success("Code executed successfully!");
     } catch (error) {
-      setOutput(`Error: ${error.message}`);
+      setOutput(`❌ ${error.name}: ${error.message}`);
       toast.error("Code execution failed!");
     }
 
-    setRunning(false);
+    setIsRunning(false);
   };
 
-  // ===========================
+  // ============================
   // CLEAR OUTPUT
-  // ===========================
+  // ============================
   const clearOutput = () => {
     setOutput("");
   };
@@ -102,15 +124,13 @@ function CodeEditor({ code, onCodeChange }) {
   return (
     <div className="editor-container">
 
-      {/* ===========================
+      {/* ============================
           EDITOR HEADER
-      =========================== */}
+      ============================ */}
       <div className="editor-header">
 
         <div className="editor-title">
-          <h3>
-            💻 Collaborative Code Editor
-          </h3>
+          <h3>💻 Collaborative Code Editor</h3>
 
           <span className="language-badge">
             JavaScript
@@ -123,11 +143,9 @@ function CodeEditor({ code, onCodeChange }) {
           <button
             className="run-code-btn"
             onClick={runCode}
-            disabled={running}
+            disabled={isRunning}
           >
-            {running
-              ? "⏳ Running..."
-              : "▶ Run Code"}
+            {isRunning ? "⏳ Running..." : "▶ Run Code"}
           </button>
 
           {/* COPY */}
@@ -149,50 +167,39 @@ function CodeEditor({ code, onCodeChange }) {
         </div>
       </div>
 
-      {/* ===========================
+      {/* ============================
           MONACO EDITOR
-      =========================== */}
-      <div className="monaco-wrapper">
+      ============================ */}
+      <Editor
+        height="calc(100% - 60px)"
+        defaultLanguage="javascript"
+        theme="vs-dark"
+        value={code}
+        onChange={(value) => onCodeChange(value || "")}
+        options={{
+          fontSize: 15,
+          minimap: {
+            enabled: false,
+          },
+          automaticLayout: true,
+          wordWrap: "on",
+          scrollBeyondLastLine: false,
+          cursorBlinking: "smooth",
+          renderWhitespace: "selection",
+          padding: {
+            top: 10,
+          },
+        }}
+      />
 
-        <Editor
-          height="100%"
-          defaultLanguage="javascript"
-          theme="vs-dark"
-          value={code}
-          onChange={(value) =>
-            onCodeChange(value || "")
-          }
-          options={{
-            fontSize: 15,
-
-            minimap: {
-              enabled: false,
-            },
-
-            automaticLayout: true,
-
-            wordWrap: "on",
-
-            scrollBeyondLastLine: false,
-
-            cursorBlinking: "smooth",
-
-            renderWhitespace: "selection",
-          }}
-        />
-
-      </div>
-
-      {/* ===========================
+      {/* ============================
           OUTPUT CONSOLE
-      =========================== */}
+      ============================ */}
       <div className="output-container">
 
         <div className="output-header">
 
-          <span>
-            🖥️ Output
-          </span>
+          <span>🖥️ Output</span>
 
           <button onClick={clearOutput}>
             Clear
@@ -201,8 +208,7 @@ function CodeEditor({ code, onCodeChange }) {
         </div>
 
         <pre className="output-content">
-          {output ||
-            "Run your JavaScript code to see the output here..."}
+          {output || "Run your JavaScript code to see the output here..."}
         </pre>
 
       </div>

@@ -1,33 +1,51 @@
 .room-page {
   height: 100vh;
+
   display: flex;
+
   flex-direction: column;
+
   background: #0f172a;
+
   overflow: hidden;
 }
 
 .room-top {
   flex: 1;
+
   display: grid;
-  grid-template-columns: 260px 1fr 340px;
+
+  grid-template-columns:
+    260px
+    1fr
+    340px;
+
   overflow: hidden;
 }
 
 .room-center {
   display: flex;
+
   flex-direction: column;
+
   overflow: hidden;
 }
 
 .editor-section {
   flex: 1;
+
   min-height: 0;
+
   overflow: hidden;
 }
 
 .whiteboard-section {
   height: 280px;
-  background: #ffffff;
-  border-top: 2px solid #334155;
+
+  background: white;
+
+  border-top:
+    2px solid #334155;
+
   overflow: hidden;
 }

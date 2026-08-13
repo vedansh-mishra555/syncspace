@@ -1,26 +1,27 @@
 .editor-container {
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #0f172a;
+  background: #1e1e1e;
   overflow: hidden;
 }
 
-/* ===========================
-   EDITOR HEADER
-=========================== */
+/* ============================
+   HEADER
+============================ */
 
 .editor-header {
-  min-height: 60px;
+  height: 58px;
+  min-height: 58px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 10px 15px;
+  padding: 0 14px;
 
   background: #1e293b;
-
   border-bottom: 1px solid #334155;
 }
 
@@ -32,52 +33,55 @@
 
 .editor-title h3 {
   margin: 0;
-
   color: white;
-
-  font-size: 18px;
+  font-size: 20px;
 }
+
+/* ============================
+   LANGUAGE BADGE
+============================ */
 
 .language-badge {
-  background: #f7df1e;
-
+  background: #facc15;
   color: #111827;
 
-  padding: 4px 10px;
+  padding: 6px 12px;
 
-  border-radius: 6px;
+  border-radius: 15px;
 
-  font-size: 12px;
-
+  font-size: 13px;
   font-weight: bold;
+
+  text-transform: uppercase;
 }
 
-/* ===========================
+/* ============================
    BUTTONS
-=========================== */
+============================ */
 
 .editor-actions {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
 .editor-actions button {
   border: none;
+  border-radius: 8px;
 
-  border-radius: 6px;
-
-  padding: 9px 12px;
+  padding: 12px 18px;
 
   color: white;
 
-  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
 
-  font-weight: 600;
+  cursor: pointer;
 
   transition: 0.2s;
 }
 
-/* RUN */
+/* RUN BUTTON */
 
 .run-code-btn {
   background: #16a34a;
@@ -88,8 +92,7 @@
 }
 
 .run-code-btn:disabled {
-  opacity: 0.6;
-
+  background: #64748b;
   cursor: not-allowed;
 }
 
@@ -113,41 +116,29 @@
   background: #6d28d9;
 }
 
-/* ===========================
-   MONACO EDITOR
-=========================== */
-
-.monaco-wrapper {
-  flex: 1;
-
-  min-height: 0;
-
-  overflow: hidden;
-}
-
-/* ===========================
+/* ============================
    OUTPUT
-=========================== */
+============================ */
 
 .output-container {
   height: 150px;
+  min-height: 150px;
 
-  background: #020617;
+  background: #0f172a;
 
   border-top: 2px solid #334155;
 
   display: flex;
-
   flex-direction: column;
 }
+
+/* OUTPUT HEADER */
 
 .output-header {
   height: 40px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   padding: 0 15px;
@@ -160,15 +151,14 @@
 }
 
 .output-header button {
-  border: none;
-
   background: #475569;
-
   color: white;
 
-  padding: 5px 10px;
+  border: none;
 
-  border-radius: 5px;
+  padding: 6px 12px;
+
+  border-radius: 6px;
 
   cursor: pointer;
 }
@@ -177,6 +167,8 @@
   background: #64748b;
 }
 
+/* OUTPUT TEXT */
+
 .output-content {
   flex: 1;
 
@@ -184,37 +176,13 @@
 
   padding: 12px 15px;
 
-  overflow-y: auto;
-
   color: #e2e8f0;
 
-  font-family: monospace;
+  font-family: "Courier New", monospace;
 
   font-size: 14px;
 
   white-space: pre-wrap;
-}
 
-/* ===========================
-   RESPONSIVE
-=========================== */
-
-@media (max-width: 900px) {
-  .editor-header {
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 10px;
-  }
-
-  .editor-actions {
-    width: 100%;
-
-    flex-wrap: wrap;
-  }
-
-  .editor-actions button {
-    flex: 1;
-  }
+  overflow-y: auto;
 }

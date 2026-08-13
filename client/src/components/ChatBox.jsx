@@ -15,51 +15,66 @@ function ChatBox({
     });
   }, [messages]);
 
+  const handleKeyDown = (event) => {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
+      event.preventDefault();
+      sendMessage();
+    }
+  };
+
   return (
     <div className="chat-container">
+
       <div className="chat-header">
         💬 Room Chat
       </div>
 
       <div className="chat-messages">
+
         {messages.length === 0 ? (
           <p
             style={{
               textAlign: "center",
               opacity: 0.6,
-              color: "white",
             }}
           >
             No messages yet...
           </p>
         ) : (
           messages.map((msg, index) => (
-            <div className="message" key={index}>
+            <div
+              className="message"
+              key={index}
+            >
               <strong>{msg.user}</strong>
+
               <p>{msg.text}</p>
             </div>
           ))
         )}
 
-        <div ref={messagesEndRef}></div>
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="chat-input">
+
         <input
           type="text"
           placeholder="Type a message..."
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              sendMessage();
-            }
-          }}
+          onChange={(e) =>
+            setMessage(e.target.value)
+          }
+          onKeyDown={handleKeyDown}
         />
 
         <button onClick={sendMessage}>
           Send
         </button>
+
       </div>
     </div>
   );

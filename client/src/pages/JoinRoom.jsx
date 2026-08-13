@@ -4,85 +4,139 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 
 import socket from "../services/socket";
+
 import "../styles/JoinRoom.css";
 
 function JoinRoom() {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
+  const [name, setName] =
+    useState("");
+
+  const [room, setRoom] =
+    useState("");
 
   const navigate = useNavigate();
 
   const generateRoom = () => {
-    const roomId = uuidv4().slice(0, 8).toUpperCase();
+    const roomId = uuidv4()
+      .slice(0, 8)
+      .toUpperCase();
+
     setRoom(roomId);
-    toast.success("Room ID Generated!");
+
+    toast.success(
+      "Room ID Generated!"
+    );
   };
 
-  const copyRoomId = () => {
+  const copyRoomId = async () => {
     if (!room) {
-      toast.warning("Generate a Room ID first!");
+      toast.warning(
+        "Generate a Room ID first!"
+      );
       return;
     }
 
-    navigator.clipboard.writeText(room);
-    toast.success("Room ID Copied!");
+    try {
+      await navigator.clipboard.writeText(
+        room
+      );
+
+      toast.success(
+        "Room ID Copied!"
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "Failed to copy Room ID"
+      );
+    }
   };
 
   const handleJoin = () => {
-    if (!name.trim() || !room.trim()) {
-      toast.warning("Please fill all fields!");
+    const cleanName =
+      name.trim();
+
+    const cleanRoom =
+      room.trim().toUpperCase();
+
+    if (!cleanName || !cleanRoom) {
+      toast.warning(
+        "Please fill all fields!"
+      );
       return;
     }
 
-    // Connect socket if not connected
     if (!socket.connected) {
       socket.connect();
     }
 
     navigate("/room", {
       state: {
-        room,
-        name,
+        room: cleanRoom,
+        name: cleanName,
       },
     });
   };
 
   return (
     <div className="join-page">
+
       <div className="join-card">
+
         <h1>🚀 SyncSpace</h1>
 
-        <p>Real-Time Collaborative Workspace</p>
+        <p>
+          Real-Time Collaborative
+          Workspace
+        </p>
 
         <input
           type="text"
           placeholder="Enter Your Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) =>
+            setName(e.target.value)
+          }
         />
 
         <input
           type="text"
           placeholder="Enter Room ID"
           value={room}
-          onChange={(e) => setRoom(e.target.value.toUpperCase())}
+          onChange={(e) =>
+            setRoom(
+              e.target.value
+                .toUpperCase()
+            )
+          }
         />
 
-        <button onClick={generateRoom}>
+        <button
+          onClick={generateRoom}
+        >
           🎲 Generate Room ID
         </button>
 
-        <button onClick={copyRoomId}>
+        <button
+          onClick={copyRoomId}
+        >
           📋 Copy Room ID
         </button>
 
-        <button onClick={handleJoin}>
+        <button
+          onClick={handleJoin}
+        >
           🚀 Join / Create Room
         </button>
 
-        <button onClick={() => navigate("/notes")}>
+        <button
+          onClick={() =>
+            navigate("/notes")
+          }
+        >
           📝 Go to Notes
         </button>
+
       </div>
     </div>
   );
